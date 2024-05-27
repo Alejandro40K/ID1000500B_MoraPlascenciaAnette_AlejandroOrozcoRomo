@@ -2,7 +2,7 @@ import logging, time
 from ipdi.ip.pyaip import pyaip, pyaip_init
 
 # IP Convolution driver class
-class ID1000500B:
+class conv_core:
     # Class constructor of IP Convolution driver
     def __init__(self, connector, nic_addr, port, csv_file):
         #object
@@ -126,7 +126,7 @@ if __name__ == "__main__":
                  0x0000007A, 0x00000035, 0x0000FFF4, 0x0000FFF8, 0x0000FFFE, 0x0000FFFF]
 
     try:
-        ipm = ID1000500B(connector, addr, port, csv_file)
+        ipm = conv_core(connector, addr, port, csv_file)
         logging.info("Test Convolution: Driver created")
     except:
         logging.error("Test Convolution: Driver not created")
