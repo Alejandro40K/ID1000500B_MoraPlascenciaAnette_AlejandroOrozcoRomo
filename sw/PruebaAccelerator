@@ -1,0 +1,43 @@
+26.05.2024 14:34:13   Configs Loaded: /home/anette/intelFPGA_lite/22.1std/quartus/HDL/ID1000500B/ID1000500B_config.csv
+
+MEMORY_Y
+MEMORY_Z
+CONFIG_REGISTER
+
+26.05.2024 14:34:13   Connected to /dev/ttyACM0: IP_CONVOLUTION_PROCESOR, MODULE FOR CONVOLUTION
+26.05.2024 14:34:17   Get ID
+26.05.2024 14:34:17   ID: 1000500B
+26.05.2024 14:34:17   Empty variable ID created
+
+
+26.05.2024 14:34:20   Get Status
+26.05.2024 14:34:20   STATUS: 00000000
+26.05.2024 14:34:20   Empty variable STATUS created
+
+
+26.05.2024 14:34:37   Variable sizeY created
+
+
+26.05.2024 14:34:39   Write ConfReg CONFIG_REGISTER with 1 flits from variable sizeY
+
+
+26.05.2024 14:35:03   Variable dataY created
+
+
+26.05.2024 14:35:05   Write Memory MEMORY_Y with 5 flits from variable dataY
+
+
+26.05.2024 14:35:10   Starting IP: IP_CONVOLUTION_PROCESOR
+26.05.2024 14:36:00   Empty variable dataZ created
+
+
+26.05.2024 14:36:01   Read Memory 14 flits from MEMORY_Z to varible dataZ
+26.05.2024 14:36:01   Response: 14 flits
+
+
+26.05.2024 14:36:17   Get Status
+26.05.2024 14:36:17   STATUS: 00000001
+26.05.2024 14:36:25   Clear INT 0
+26.05.2024 14:36:31   Get Status
+26.05.2024 14:36:31   STATUS: 00000000
+26.05.2024 14:37:00   Script IP_CONVOLUTION_PROCESOR_20240526-143636.ips saved

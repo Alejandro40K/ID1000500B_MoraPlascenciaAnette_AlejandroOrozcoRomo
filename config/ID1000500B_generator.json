@@ -1,0 +1,51 @@
+{
+    "ipdata": {
+        "comment": "MODULE FOR CONVOLUTION",
+        "enom": "IP_CONVOLUTION_PROCESOR",
+        "ipid": "1000500B"
+    },
+    "memories": {
+        "cfgReg": {
+            "comment": "REGISTER FOR CONFIGURATION",
+            "enom": "CONFIG_REGISTER",
+            "size": "1",
+            "val": "5'b00100"
+        },
+        "memIn": [
+            {
+                "comment": "MEMORY IN_NAME Y",
+                "enom": "MEMORY_Y",
+                "size": "32",
+                "val": "5'b00000"
+            }
+        ],
+        "memInStream": {
+        },
+        "memOut": [
+            {
+                "comment": "MEMORY OUT_NAME Z",
+                "enom": "MEMORY_Z",
+                "size": "64",
+                "val": "5'b00010"
+            }
+        ],
+        "memOutStream": {
+        }
+    },
+    "regs": {
+        "reg1": "",
+        "reg10": "",
+        "reg11": "",
+        "reg12": "",
+        "reg13": "",
+        "reg14": "",
+        "reg15": "",
+        "reg2": "",
+        "reg3": "",
+        "reg4": "",
+        "reg5": "",
+        "reg6": "",
+        "reg7": "",
+        "reg9": ""
+    }
+}
