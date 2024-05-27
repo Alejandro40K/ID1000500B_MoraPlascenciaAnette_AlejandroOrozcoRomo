@@ -1,0 +1,60 @@
+/*	
+   ===================================================================
+   Module Name  : Comparator Greater Iqual Than
+      
+   Filename     : comparatorGreaterThan.v
+   Type         : Verilog Module
+   
+   Description  : This block compares two unsigned binary numbers.
+                  A_greater_than_B_o output values:
+                  
+                  Value   Condition
+                  
+                  1'b1     A_i >= B_i                  
+                  1'b0     otherwise
+                  
+   -----------------------------------------------------------------------------
+   Clocks      : -
+   Reset       : -
+   Parameters  :   
+         NAME                         Comments                   Default
+         ------------------------------------------------------------------------------
+         DATA_WIDTH              Number of data bits                13 
+         ------------------------------------------------------------------------------
+   Version     : 1.0
+   Data        : 14 Nov 2018
+   Revision    : -
+   Reviser     : -		
+   ------------------------------------------------------------------------------
+      Modification Log "please register all the modifications in this area"
+      (D/M/Y)  
+      
+   ----------------------
+   // Instance template
+   ----------------------
+   comparatorGreaterIqualThan 
+   #(
+      .DATA_WIDTH   (),
+   )
+   "MODULE_NAME"
+   (
+      A_i            (),
+      B_i            (), 
+      A_greater_than_B_o()
+   );
+*/
+
+module convolution_procesor_comparatorGreaterIqualThan
+#(
+   parameter DATA_WIDTH_A = 13,
+   parameter DATA_WIDTH_B = 13
+)(
+	input [DATA_WIDTH_A-1:0] A_i,
+	input [DATA_WIDTH_B-1:0] B_i, 
+	output                 A_greater_than_B_o
+);
+
+assign A_greater_than_B_o = ( A_i >= B_i ) ? 1'b1 :  1'b0;
+
+endmodule
+

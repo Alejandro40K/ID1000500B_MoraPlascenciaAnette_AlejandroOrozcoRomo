@@ -1,92 +1,119 @@
-import logging
-import time
+import logging, time
 from ipdi.ip.pyaip import pyaip, pyaip_init
 
 # IP Convolution driver class
 class ID1000500B:
+    # Class constructor of IP Convolution driver
     def __init__(self, connector, nic_addr, port, csv_file):
+        #object
         self.__pyaip = pyaip_init(connector, nic_addr, port, csv_file)
 
         if self.__pyaip is None:
-            logging.debug("Error creating CAIP object")
+            logging.debug("error")
 
-        self.data_RX = []
+        # Array of strings with information read
+        self.dataRX = []
+
         self.__pyaip.reset()
+
+        # IP Core IP-ID
         self.IPID = 0
-        self.__get_ID()
-        self.__clear_status()
+
+        self.__getID()
+
+        self.__clearStatus()
 
         logging.debug(f"IP Dummy controller created with IP ID {self.IPID:08x}")
 
-    def __write_data(self, data_Y):
-        self.size_data_Y = len(data_Y)
-        self.__pyaip.write_mem('MEMORY_Y', data_Y, len(data_Y), 0)
+    def conv(self, Y):
+        if len(Y) == 0 or len(Y) > 32:
+            logging.info("Input data is empty or is greater than 32")
+
+        sizeY = len(Y)
+        # hex_y = f"{sizeY:08x}"
+        self.SizeY_config(sizeY)
+
+        self.__writeData(Y)
+
+        self.startIP()
+
+        self.waitInt()
+
+        conv_size = 10 + len(Y) - 1
+        data_z = self.readData(conv_size)
+
+        return data_z
+
+    # Write data in the IP Core input memory
+    def __writeData(self, data_Y):
+        self.sizeDataY = len(data_Y)
+        self.__pyaip.writeMem('MEMORY_Y', data_Y, len(data_Y), 0)
         logging.debug("Data captured in Mem Data In")
 
-    def read_data(self, size):
-        data_Z = self.__pyaip.read_mem('MEMORY_Z', size, 0)
+    # Read data from the IP Core output memory
+    def readData(self,size):
+        dataZ = self.__pyaip.readMem('MEMORY_Z', size, 0)
         logging.debug("Data obtained from Mem Data Out")
-        return data_Z
+        return dataZ
 
-    def start_IP(self):
+    # Start processing in IP Core
+    def startIP(self):
         self.__pyaip.start()
         logging.debug("Start sent")
 
+    # Set and enable sizeY
     def SizeY_config(self, size_Y_config):
-        self.size_Y = size_Y_config
-        self.__pyaip.write_conf_reg('CONFIG_REGISTER', [size_Y_config], 1, 0)
-        logging.debug(f"Size Y set to {size_Y_config} ")
+        self.sizeY = size_Y_config
+        self.__pyaip.writeConfReg('CONFIG_REGISTER', [size_Y_config], 1, 0)
+        logging.debug(f"Size Y setted to {size_Y_config} ")
 
-    def enable_INT(self):
-        self.__pyaip.enable_INT(0, None)
+    # Enable IP Core interruptions
+    def enableINT(self):
+        self.__pyaip.enableINT(0, None)
         logging.debug("Int enabled")
 
-    def disable_INT(self):
-        self.__pyaip.disable_INT(0)
+    # Disable IP Core interruptions
+    def disableINT(self):
+        self.__pyaip.disableINT(0)
+
         logging.debug("Int disabled")
 
+    # Show IP Core status
     def status(self):
-        status = self.__pyaip.get_status()
-        logging.info(f"Status: {status:08x}")
+        STATUS = self.__pyaip.getStatus()
+        logging.info(f"{STATUS:08x}")
 
+    # Finish connection
     def finish(self):
         self.__pyaip.finish()
 
-    def wait_int(self):
+    # Wait for the completion of the process
+    def waitInt(self):
         waiting = True
+
         while waiting:
-            status = self.__pyaip.get_status()
-            logging.debug(f"Status: {status:08x}")
+
+            status = self.__pyaip.getStatus()
+
+            logging.debug(f"status {status:08x}")
+
             if status & 0x1:
                 waiting = False
+
             time.sleep(0.1)
 
-        self.__pyaip.clear_INT(0)
+    # Get IP ID
+    def __getID(self):
+        self.IPID = self.__pyaip.getID()
 
-    def __get_ID(self):
-        self.IPID = self.__pyaip.get_ID()
-
-    def __clear_status(self):
+    # Clear status register of IP Dummy
+    def __clearStatus(self):
         for i in range(8):
-            self.__pyaip.clear_INT(i)
-            
-    def conv(self, Y):
-        if not Y or len(Y) > 32:
-            logging.info("Input data is empty or greater than 32")
-            return
-
-        size_Y = len(Y)
-        self.SizeY_config(size_Y)
-        self.__write_data(Y)
-        self.start_IP()
-        self.wait_int()
-        convolution_size = 10 + len(Y) - 1
-        data_Z = self.read_data(convolution_size)
-        return data_Z
+            self.__pyaip.clearINT(i)
 
 
 if __name__ == "__main__":
-    import sys
+    import sys, random, time, os
 
     logging.basicConfig(level=logging.INFO)
     connector = '/dev/ttyACM0'
@@ -95,9 +122,8 @@ if __name__ == "__main__":
     port = 0
 
     data_Y = [0x00000001, 0x0000000B, 0x00000004, 0x000000FE, 0x000000FF]
-    data_x = [0x0000FFFF, 0x0000FFF7, 0x00000017, 0x00000044, 0x0000003C, 
-              0x0000006C, 0x00000006, 0x0000FFE2, 0x0000007A, 0x00000035, 
-              0x0000FFF4, 0x0000FFF8, 0x0000FFFE, 0x0000FFFF]
+    modeloOro = [0x0000FFFF, 0x0000FFF7, 0x00000017, 0x00000044, 0x0000003C, 0x0000006C, 0x00000006, 0x0000FFE2,
+                 0x0000007A, 0x00000035, 0x0000FFF4, 0x0000FFF8, 0x0000FFFE, 0x0000FFFF]
 
     try:
         ipm = ID1000500B(connector, addr, port, csv_file)
@@ -106,15 +132,16 @@ if __name__ == "__main__":
         logging.error("Test Convolution: Driver not created")
         sys.exit()
 
-    ipm.disable_INT()
+    ipm.disableINT()
 
-    data_Z = ipm.conv(data_Y)
-    print(f'data_Z Data: {[f"{x:08X}" for x in data_Z]}\n')
+    dataZ = ipm.conv(data_Y)
+    print(f'data_Z Data: {[f"{x:08X}" for x in dataZ]}\n')
 
-    for x, y in zip(data_x, data_Z):
+    for x, y in zip(modeloOro, dataZ):
         logging.info(f"TX: {x:08x} | RX: {y:08x} | {'TRUE' if x == y else 'FALSE'}")
 
     ipm.status()
+
     ipm.finish()
 
     logging.info("The End")
